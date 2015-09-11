@@ -1,0 +1,32 @@
+<Fruitutor>:
+    # menubar
+    AnchorLayout:
+        anchor_y: 'top'
+
+        MenuBar:
+            id: menu_bar
+            size_hint: 1, 0.1
+
+    # input device
+    AnchorLayout:
+        anchor_x: 'left'
+
+        InputDisplay:
+            id: input_display
+            size_hint: 0.3, 0.7
+
+    # tutor
+    AnchorLayout:
+        anchor_x: 'right'
+
+        TutorDisplay:
+            id: tutor_display
+            size_hint: 0.7,  0.7
+
+    # stats
+    AnchorLayout:
+        anchor_y: 'bottom'
+
+        StatsDisplay:
+            id: stats_display
+            size_hint: 1, 0.2
