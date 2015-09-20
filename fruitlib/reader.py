@@ -1,3 +1,7 @@
+from tutor import Lesson
+
+import os
+
 COMMENT_STR = '#'
 NUM_FIELDS = 4
 FIELD_NAMES = ('filename', 'lines_per_run', 'highlight', 'mcc_highlight')
@@ -10,7 +14,7 @@ class InvalidLesson(Exception):
 def read_lessons(filename):
     '''Reads the lesson table and each lesson in the format used by Twidor:
 
-    filename	lines_per_run	highlighting	MCC_highlighting
+    filename	lines_per_run	highlight	MCC_highlight
 
     Note that there are tabs between each field, not spaces.  Extraneous
     whitespace is stripped.  # begins a comment, everything from there to the
@@ -29,28 +33,44 @@ def read_lessons(filename):
 
 
 def read_lesson(line):
-    lesson = get_fields(line)
-    with open(lesson['filename']) as f:
-        sentences = f.read().split('\n')
-    sentences = (s.rstrip() for s in sentences)
-    sentences = tuple(empties_removed(sentences))
-    lesson['sentences'] = sentences
-    return lesson
+    fields = lesson_fields(line)
+    with open(fields['filename']) as f:
+        lines = f.read().split('\n')
+    lines = (s.rstrip() for s in lines)
+    lines = tuple(empties_removed(lines))
+    fields['lines'] = lines
+    return Lesson(**fields)
 
 
-def get_fields(line):
-    line = strip_comments(line)
+def lesson_fields(line):
+    line = comments_stripped(line)
     fields = line.split('\t')
     fields = (field.strip() for field in fields)
     fields = tuple(empties_removed(fields))
     if len(fields) != NUM_FIELDS:
         raise InvalidLesson()
-    return dict(zip(FIELD_NAMES, fields))
+    fields = dict(zip(FIELD_NAMES, fields))
+    return bool_fields_converted(fields)
 
 
-def strip_comments(line):
+def comments_stripped(line):
     return line.split(COMMENT_STR)[0].strip()
 
 
 def empties_removed(seq):
     return (item for item in seq if len(item) > 0)
+
+
+def bool_fields_converted(fields):
+    fields = dict(fields)
+    for bool_field in ('highlight', 'mcc_highlight'):
+        fields[bool_field] = bool_from_yes_no(fields[bool_field])
+    return fields
+
+
+def bool_from_yes_no(s):
+    if s.lower() in ('yes', 'y'):
+        return True
+    elif s.lower() in ('no', 'n'):
+        return False
+    return None
