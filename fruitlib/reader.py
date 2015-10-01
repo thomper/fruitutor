@@ -39,6 +39,8 @@ def read_lesson(line):
     lines = (s.rstrip() for s in lines)
     lines = tuple(empties_removed(lines))
     fields['lines'] = lines
+    if not lesson_is_valid(fields):
+        raise InvalidLesson()
     return Lesson(**fields)
 
 
@@ -50,7 +52,13 @@ def lesson_fields(line):
     if len(fields) != NUM_FIELDS:
         raise InvalidLesson()
     fields = dict(zip(FIELD_NAMES, fields))
+    fields = int_fields_converted(fields)
     return bool_fields_converted(fields)
+
+
+def lesson_is_valid(fields):
+    return all((fields['lines_per_run'] <= len(fields['lines']),
+                fields['lines_per_run'] >= 1))
 
 
 def comments_stripped(line):
@@ -61,11 +69,20 @@ def empties_removed(seq):
     return (item for item in seq if len(item) > 0)
 
 
+def int_fields_converted(fields):
+    return applied_to_keyed(fields, ('lines_per_run', ), int)
+
+
 def bool_fields_converted(fields):
-    fields = dict(fields)
-    for bool_field in ('highlight', 'mcc_highlight'):
-        fields[bool_field] = bool_from_yes_no(fields[bool_field])
-    return fields
+    return applied_to_keyed(fields, ('highlight', 'mcc_highlight'),
+                            bool_from_yes_no)
+
+
+def applied_to_keyed(dct, keys, func):
+    dct = dict(dct)  # don't mutate original
+    for key in keys:
+        dct[key] = func(dct[key])
+    return dct
 
 
 def bool_from_yes_no(s):
