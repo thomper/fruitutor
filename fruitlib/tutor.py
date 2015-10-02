@@ -34,7 +34,7 @@ class Run():
 
     def next(self):
         if len(self.used) < self.lesson.lines_per_run:
-            self.current = random.choice(tuple(self.unused()))
+            self.current = random.choice(self.unused())
             self.used.append(self.current)
             self.input = ''
             return True
@@ -47,4 +47,4 @@ class Run():
             self.input += char
 
     def unused(self):
-        return set(self.lesson.lines) - set(self.used)
+        return tuple(set(self.lesson.lines) - set(self.used))
