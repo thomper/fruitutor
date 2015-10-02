@@ -7,6 +7,10 @@ NUM_FIELDS = 4
 FIELD_NAMES = ('filename', 'lines_per_run', 'highlight', 'mcc_highlight')
 
 
+class BlankLine(Exception):
+    # Line doesn't contain a lesson but also isn't malformed
+    pass
+
 class InvalidLesson(Exception):
     pass
 
@@ -28,8 +32,10 @@ def read_lessons(filename):
         for line in f:
             try:
                 yield read_lesson(line)
-            except InvalidLesson as e:
+            except BlankLine as e:
                 pass
+            except InvalidLesson as e:
+                print(e)
 
 
 def read_lesson(line):
@@ -40,7 +46,7 @@ def read_lesson(line):
     lines = tuple(empties_removed(lines))
     fields['lines'] = lines
     if not lesson_is_valid(fields):
-        raise InvalidLesson()
+        raise InvalidLesson(fields)
     return Lesson(**fields)
 
 
@@ -49,11 +55,12 @@ def lesson_fields(line):
     fields = line.split('\t')
     fields = (field.strip() for field in fields)
     fields = tuple(empties_removed(fields))
+    if len(fields) == 0:
+        raise BlankLine()
     if len(fields) != NUM_FIELDS:
-        raise InvalidLesson()
+        raise InvalidLesson(fields)
     fields = dict(zip(FIELD_NAMES, fields))
-    fields = int_fields_converted(fields)
-    return bool_fields_converted(fields)
+    return field_types_converted(fields)
 
 
 def lesson_is_valid(fields):
@@ -67,6 +74,15 @@ def comments_stripped(line):
 
 def empties_removed(seq):
     return (item for item in seq if len(item) > 0)
+
+
+def field_types_converted(fields):
+    try:
+        for conversion in (int_fields_converted, bool_fields_converted):
+            fields = conversion(fields)
+    except ValueError as e:
+        raise InvalidLesson(e, fields)
+    return fields
 
 
 def int_fields_converted(fields):
@@ -90,4 +106,4 @@ def bool_from_yes_no(s):
         return True
     elif s.lower() in ('no', 'n'):
         return False
-    return None
+    raise ValueError("Invalid literal for bool type, expected 'y' or 'n': '{}'".format(s))
