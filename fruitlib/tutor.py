@@ -44,7 +44,9 @@ class Run():
         if char == '\b':
             self.input = self.input[:-1]
         elif char in string.printable:
-            self.input += char
+            if len(self.input) < len(self.current):
+                self.input += char
+        # TODO: stats
 
     def unused(self):
         return tuple(set(self.lesson.lines) - set(self.used))
