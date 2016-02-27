@@ -24,9 +24,11 @@ Lines: {}'''.format(self.filename,
              len(self.lines))
 
 
-class Run():
-    def __init__(self, lesson):
+class LessonRun():
+    def __init__(self, lesson, input_callbacks=None, sentence_callbacks=None):
         self.lesson = lesson
+        self.input_callbacks = input_callbacks or ()
+        self.sentence_callbacks = sentence_callbacks or ()
         self.used = []
         self.current = None
         self.input = ''
@@ -43,10 +45,20 @@ class Run():
     def input_char(self, char):
         if char == '\b':
             self.input = self.input[:-1]
+        elif not (type(char) == str and len(char) == 1):
+            return
         elif char in string.printable:
             if len(self.input) < len(self.current):
                 self.input += char
+                self.check_sentence_complete()
+        for cb in self.input_callbacks:
+            cb(char, self.input)
         # TODO: stats
+
+    def check_sentence_complete(self):
+        if self.input.lower() == self.current.lower():
+            for cb in self.sentence_callbacks:
+                cb()
 
     def unused(self):
         return tuple(set(self.lesson.lines) - set(self.used))
