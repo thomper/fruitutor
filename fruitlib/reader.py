@@ -35,7 +35,7 @@ def read_lessons(filename):
         for line in f:
             try:
                 yield read_lesson(line)
-            except BlankLine as e:
+            except BlankLine:
                 pass
             except InvalidLesson as e:
                 print(e)

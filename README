@@ -7,8 +7,8 @@ Become fluent with the Twiddler so you can keep one hand on the keyboard
 and one hand on the mouse at all times, living Engelbart's dream.
 
 The point is to run on Android so you can train on the train.  Currently
-waiting for the Kivy project to release Python 3 support.  Fruitutor
-won't run on Android until then.
+waiting for the Kivy project to release Python 3 for Android support.
+Fruitutor won't run on Android until then.
 
 
 Requires Python 3 and Kivy.
