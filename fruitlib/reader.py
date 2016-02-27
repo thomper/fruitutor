@@ -1,4 +1,4 @@
-from tutor import Lesson
+from .tutor import Lesson
 
 import os
 
@@ -19,6 +19,9 @@ def read_lessons(filename):
     '''Reads the lesson table and each lesson in the format used by Twidor:
 
     filename	lines_per_run	highlight	MCC_highlight
+
+    Note that filename must be written as a unix path, it'll be converted to
+    the host os format later.
 
     Note that there are tabs between each field, not spaces.  Extraneous
     whitespace is stripped.  # begins a comment, everything from there to the
@@ -45,8 +48,7 @@ def read_lesson(line):
     lines = (s.rstrip() for s in lines)
     lines = tuple(empties_removed(lines))
     fields['lines'] = lines
-    if not lesson_is_valid(fields):
-        raise InvalidLesson(fields)
+    validate_lesson(fields)
     return Lesson(**fields)
 
 
@@ -58,14 +60,22 @@ def lesson_fields(line):
     if len(fields) == 0:
         raise BlankLine()
     if len(fields) != NUM_FIELDS:
-        raise InvalidLesson(fields)
+        raise InvalidLesson('Incorrect number of fields: {}, expected 4'.format(
+            len(fields)))
     fields = dict(zip(FIELD_NAMES, fields))
+    fields['filename'] = os.path.join(*fields['filename'].split('/'))  
     return field_types_converted(fields)
 
 
-def lesson_is_valid(fields):
-    return all((fields['lines_per_run'] <= len(fields['lines']),
-                fields['lines_per_run'] >= 1))
+def validate_lesson(fields):
+    lines_per_run = fields['lines_per_run']
+    lines = fields['lines']
+    if lines_per_run > len(lines):
+        raise InvalidLesson('lines_per_run, {}, was greater than number of lines, {}'.format(
+            lines_per_run, len(lines)))
+    if lines_per_run < 1:
+        raise InvalidLesson('lines per run was less then 1: {}'.format(
+            lines_per_run))
 
 
 def comments_stripped(line):
@@ -78,8 +88,8 @@ def empties_removed(seq):
 
 def field_types_converted(fields):
     try:
-        for conversion in (int_fields_converted, bool_fields_converted):
-            fields = conversion(fields)
+        for convert_func in (int_fields_converted, bool_fields_converted):
+            fields = convert_func(fields)
     except ValueError as e:
         raise InvalidLesson(e, fields)
     return fields
@@ -106,4 +116,5 @@ def bool_from_yes_no(s):
         return True
     elif s.lower() in ('no', 'n'):
         return False
-    raise ValueError("Invalid literal for bool type, expected 'y' or 'n': '{}'".format(s))
+    raise ValueError("Invalid literal for bool type, expected 'y', 'yes', 'n',"\
+                     "or 'no': '{}'".format(s))
