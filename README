@@ -1,0 +1,22 @@
+Fruitutor
+---------
+A typing tutor to help learn to use the Twiddler V3 one-handed chorded
+keyboard.
+
+Become fluent with the Twiddler so you can keep one hand on the keyboard
+and one hand on the mouse at all times, living Engelbart's dream.
+
+The point is to run on Android so you can train on the train.  Currently
+waiting for the Kivy project to release Python 3 support.  Fruitutor
+won't run on Android until then.
+
+
+Requires Python 3 and Kivy.
+
+NOT ready for use at this point in time.
+
+
+To test: ./run_debug.sh
+
+
+Licenced under the GPL V3.  See LICENCE for more.
