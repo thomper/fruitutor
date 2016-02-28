@@ -52,14 +52,12 @@ class LessonRun():
         elif char in string.printable:
             if len(self.input) < len(self.current):
                 self.input += char
-        for cb in self.input_callbacks:
-            cb(self.input)
+        self.do_input_callbacks()
         # TODO: stats
 
     def check_sentence_complete(self):
         if self.input.lower() == self.current.lower():
-            for cb in self.sentence_callbacks:
-                cb()
+            self.do_sentence_callbacks()
 
     def unused(self):
         return tuple(set(self.lesson.lines) - set(self.used))
@@ -67,7 +65,19 @@ class LessonRun():
     def change_sentence(self, sentence):
         self.current = sentence
         self.used.append(self.current)
+        self.clear_input()
+
+    def clear_input(self):
         self.input = ''
+        self.do_input_callbacks()
+
+    def do_input_callbacks(self):
+        for cb in self.input_callbacks:
+            cb(self.input)
+
+    def do_sentence_callbacks(self):
+        for cb in self.sentence_callbacks:
+            cb()
 
 
 class Session():
@@ -84,12 +94,23 @@ class Session():
     def current_sentence(self):
         return self.run.current
 
+    def input_char(self, char):
+        self.run.input_char(char)
+
     def load_lesson(self):
         self.run = LessonRun(self.lessons[self.current_lesson],
                              self.input_callbacks, self.sentence_callbacks)
 
     def next_sentence(self):
-        return self.run.next()
+        if self.run.next():
+            return True
+        else:
+            return self.next_lesson()
 
-    def input_char(self, char):
-        self.run.input_char(char)
+    def next_lesson(self):
+        if self.current_lesson + 1 >= len(self.lessons):
+            return False
+        else:
+            self.current_lesson += 1
+            self.run.input = ''  # old Run updates input display again after new run is created
+            self.load_lesson()
