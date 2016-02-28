@@ -36,9 +36,7 @@ class LessonRun():
 
     def next(self):
         if len(self.used) < self.lesson.lines_per_run:
-            self.current = random.choice(self.unused())
-            self.used.append(self.current)
-            self.input = ''
+            self.change_sentence(random.choice(self.unused()))
             return True
         return False
 
@@ -63,3 +61,8 @@ class LessonRun():
 
     def unused(self):
         return tuple(set(self.lesson.lines) - set(self.used))
+
+    def change_sentence(self, sentence):
+        self.current = sentence
+        self.used.append(self.current)
+        self.input = ''
