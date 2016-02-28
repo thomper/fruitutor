@@ -55,6 +55,8 @@ class Fruitutor(FloatLayout):
 
     def on_keyboard_down(self, keyboard, keycode, text, modifiers):
         char = chr(keycode[0])
+        if char in ('\r', '\n', '\r\n'):
+            char = '\n'
 
         # This shift handling is a temporary hack for testing
         if 'shift' in modifiers:

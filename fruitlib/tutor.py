@@ -45,12 +45,13 @@ class LessonRun():
     def input_char(self, char):
         if char == '\b':
             self.input = self.input[:-1]
+        elif char == '\n':
+                self.check_sentence_complete()
         elif not (type(char) == str and len(char) == 1):
             return
         elif char in string.printable:
             if len(self.input) < len(self.current):
                 self.input += char
-                self.check_sentence_complete()
         for cb in self.input_callbacks:
             cb(char, self.input)
         # TODO: stats
