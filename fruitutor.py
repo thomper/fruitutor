@@ -1,3 +1,4 @@
+import inputdisplay
 from fruitlib import tutor
 
 from kivy.app import App
@@ -44,6 +45,7 @@ SHIFT_KEYS = {'`': '~',
 class Fruitutor(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.input_display.on_load()
         self.get_keyboard()
         self.session = tutor.Session(DEFAULT_LESSONS_FILE,
                                      (self.update_user_sentence, ),
@@ -75,9 +77,11 @@ class Fruitutor(FloatLayout):
 
     def update_current_sentence(self):
         self.tutor_display.lesson_sentence.text = self.session.current_sentence
+        self.highlight_keys()
 
     def update_user_sentence(self, sentence):
         self.tutor_display.user_sentence.text = sentence
+        self.highlight_keys()
 
     def on_sentence_complete(self):
         self.next_sentence()
@@ -85,6 +89,12 @@ class Fruitutor(FloatLayout):
     def next_sentence(self):
         self.session.next_sentence()
         self.update_current_sentence()
+
+    def highlight_keys(self):
+        try:
+            self.input_display.highlight_keys(self.session.next_char)
+        except AttributeError:
+            pass  # this method can be called before self.session is set
 
 
 
