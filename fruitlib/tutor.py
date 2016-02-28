@@ -1,3 +1,5 @@
+import fruitlib.reader
+
 import string
 import random
 
@@ -51,7 +53,7 @@ class LessonRun():
             if len(self.input) < len(self.current):
                 self.input += char
         for cb in self.input_callbacks:
-            cb(char, self.input)
+            cb(self.input)
         # TODO: stats
 
     def check_sentence_complete(self):
@@ -66,3 +68,28 @@ class LessonRun():
         self.current = sentence
         self.used.append(self.current)
         self.input = ''
+
+
+class Session():
+    def __init__(self, lessons_file, input_callbacks, sentence_callbacks):
+        self.lessons = tuple((Lesson(**fields) for fields in
+                              fruitlib.reader.read_lessons(lessons_file)))
+        self.input_callbacks = input_callbacks or ()
+        self.sentence_callbacks = sentence_callbacks or ()
+        self.current_lesson = 0
+        self.run = None
+        self.load_lesson()
+
+    @property
+    def current_sentence(self):
+        return self.run.current
+
+    def load_lesson(self):
+        self.run = LessonRun(self.lessons[self.current_lesson],
+                             self.input_callbacks, self.sentence_callbacks)
+
+    def next_sentence(self):
+        return self.run.next()
+
+    def input_char(self, char):
+        self.run.input_char(char)
