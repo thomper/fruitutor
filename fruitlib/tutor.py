@@ -94,6 +94,20 @@ class Session():
     def current_sentence(self):
         return self.run.current
 
+    # TODO: should this be moved to LessonRun?
+    @property
+    def next_char(self):
+        'Get the next character that must be entered.'
+        input_ = self.run.input
+        if (len(input_) > len(self.current_sentence) or
+                (input_ and
+                 input_.lower() != self.current_sentence[:len(input_)].lower())):
+            return '\b'
+        elif input_.lower() == self.current_sentence.lower():
+            return '\n'
+        else:
+            return self.current_sentence[len(input_)].lower()
+
     def input_char(self, char):
         self.run.input_char(char)
 
@@ -112,5 +126,6 @@ class Session():
             return False
         else:
             self.current_lesson += 1
-            self.run.input = ''  # old Run updates input display again after new run is created
+            self.run.input = ''  # the old run updates input display again after new run is created because the new run is created in a callback
             self.load_lesson()
+            return True
