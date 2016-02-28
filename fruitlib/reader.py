@@ -1,5 +1,3 @@
-from .tutor import Lesson
-
 import os
 
 COMMENT_STR = '#'
@@ -49,7 +47,7 @@ def read_lesson(line):
     lines = tuple(empties_removed(lines))
     fields['lines'] = lines
     validate_lesson(fields)
-    return Lesson(**fields)
+    return fields
 
 
 def lesson_fields(line):
