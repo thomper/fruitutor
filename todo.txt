@@ -1,10 +1,14 @@
 [X] Enter key moves to next sentence
 [X] If no sentences left, move to next lesson
 [ ] Find a solution for differing system keymaps
+[ ] Add unit testing for fruitlib
 
 [ ] twiddler display
-  [ ] highlight combo for next letter, assuming default key layout
+  [X] highlight combo for next letter, assuming default key layout
   [ ] make the mirror button work
+
+[ ] stats display
+  [ ] add basic stats
 
 [ ] other
   [ ] Show lesson title somewhere
