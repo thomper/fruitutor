@@ -1,0 +1,11 @@
+[X] Enter key moves to next sentence
+[X] If no sentences left, move to next lesson
+[ ] Find a solution for differing system keymaps
+
+[ ] twiddler display
+  [ ] highlight combo for next letter, assuming default key layout
+  [ ] make the mirror button work
+
+[ ] other
+  [ ] Show lesson title somewhere
+  [ ] Refactor tutor.py and fruitutor.py, the callbacks are getting to be too hard to follow
