@@ -7,7 +7,7 @@ class MenuBar(BoxLayout):
         App.get_running_app().stop()
 
     def mirror(self):
-        pass
+        self.parent.parent.input_display.mirror()
 
     def lesson(self):
         pass

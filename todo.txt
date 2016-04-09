@@ -3,9 +3,9 @@
 [ ] Find a solution for differing system keymaps
 [ ] Add unit testing for fruitlib
 
-[ ] twiddler display
+[x] twiddler display
   [X] highlight combo for next letter, assuming default key layout
-  [ ] make the mirror button work
+  [x] make the mirror button work
 
 [ ] stats display
   [ ] add basic stats

@@ -1,4 +1,8 @@
 from kivy.uix.gridlayout import GridLayout
+import util
+
+import itertools
+
 
 YELLOW = [1, 1, 0.2, 1]
 WHITE = [1, 1, 1, 1]
@@ -65,3 +69,13 @@ class InputDisplay(GridLayout):
                 highlight(self.labels[label_name])
             else:
                 unhighlight(self.labels[label_name])
+
+    def mirror(self):
+        old_children = tuple(reversed(self.children))  # self.children is in reverse layout order
+        for child in old_children:
+            self.remove_widget(child)
+        old_layout = util.reshape_1d_to_2d(old_children, 3)  # TODO: twiddler layout is 4 rows of 3 keys, do we want to generalise for other keyboards?
+        new_layout = (reversed(row) for row in old_layout)
+        new_children = itertools.chain(*new_layout)
+        for child in new_children:
+            self.add_widget(child)
