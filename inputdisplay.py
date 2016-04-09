@@ -74,7 +74,7 @@ class InputDisplay(GridLayout):
         old_children = tuple(reversed(self.children))  # self.children is in reverse layout order
         for child in old_children:
             self.remove_widget(child)
-        old_layout = util.reshape_1d_to_2d(old_children, 3)  # TODO: twiddler layout is 4 rows of 3 keys, do we want to generalise for other keyboards?
+        old_layout = util.reshape_1d_to_2d(old_children, self.cols)
         new_layout = (reversed(row) for row in old_layout)
         new_children = itertools.chain(*new_layout)
         for child in new_children:
