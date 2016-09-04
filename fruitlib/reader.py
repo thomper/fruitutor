@@ -9,12 +9,13 @@ class BlankLine(Exception):
     # Line doesn't contain a lesson but also isn't malformed
     pass
 
+
 class InvalidLesson(Exception):
     pass
 
 
 def read_lessons(filename):
-    '''Reads the lesson table and each lesson in the format used by Twidor:
+    """Reads the lesson table and each lesson in the format used by Twidor:
 
     filename	lines_per_run	highlight	MCC_highlight
 
@@ -28,7 +29,7 @@ def read_lessons(filename):
     E.g.:
 
     lesson1.txt	10	y	y
-    '''
+    """
     with open(filename) as f:
         for line in f:
             try:
@@ -114,5 +115,5 @@ def bool_from_yes_no(s):
         return True
     elif s.lower() in ('no', 'n'):
         return False
-    raise ValueError("Invalid literal for bool type, expected 'y', 'yes', 'n',"\
+    raise ValueError("Invalid literal for bool type, expected 'y', 'yes', 'n',"
                      "or 'no': '{}'".format(s))

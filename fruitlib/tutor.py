@@ -20,10 +20,10 @@ Lines per run: {}
 Highlight: {}
 Highlight MCC: {}
 Lines: {}'''.format(self.filename,
-             self.lines_per_run,
-             self.highlight,
-             self.mcc_highlight,
-             len(self.lines))
+                    self.lines_per_run,
+                    self.highlight,
+                    self.mcc_highlight,
+                    len(self.lines))
 
 
 class LessonRun():
@@ -46,7 +46,7 @@ class LessonRun():
         if char == '\b':
             self.input = self.input[:-1]
         elif char == '\n':
-                self.check_sentence_complete()
+            self.check_sentence_complete()
         elif not (type(char) == str and len(char) == 1):
             return
         elif char in string.printable:
@@ -97,7 +97,7 @@ class Session():
     # TODO: should this be moved to LessonRun?
     @property
     def next_char(self):
-        'Get the next character that must be entered.'
+        """Get the next character that must be entered."""
         input_ = self.run.input
         if (len(input_) > len(self.current_sentence) or
                 (input_ and
@@ -126,6 +126,7 @@ class Session():
             return False
         else:
             self.current_lesson += 1
-            self.run.input = ''  # the old run updates input display again after new run is created because the new run is created in a callback
+            self.run.input = ''  # the old run updates input display again after new run is created because the new
+                                 # run is created in a callback
             self.load_lesson()
             return True
