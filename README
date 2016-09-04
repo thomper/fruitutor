@@ -5,8 +5,11 @@ keyboard.  Licensed under the GPL V3.
 
 SEE IT IN ACTION HERE: http://ontbee.com/img/fruitutor_demo.gif
 
+NOT ready for use at this point in time.
+
 Note the key combo for the next character is highlighted in yellow on
 the left--that's the whole point of this program.
+
 
 Become fluent with the Twiddler so you can keep one hand on the keyboard
 and one hand on the mouse at all times, living Engelbart's dream.
@@ -16,17 +19,26 @@ waiting for the Kivy project to release Python 3 for Android support.
 Fruitutor won't run on Android until then.
 
 
+Setup
+-----
 Requires Python 3 and Kivy.
 
-NOT ready for use at this point in time.
+Set up a virtualenv and install everything in requirements.txt.
+
+Kivy installation in Python 3 is a pain, you'll probably have to
+search pip install errors to find which packages your OS needs to
+compile Kivy.  Final release will have full instructions for Ubuntu
+and Debian.
 
 
+Use
+---
 To test: ./run_debug.sh
 
 Note that once you finish the last lesson, nothing will happen on
-enter.  Obviously this'll be changed in later versions.
+pressing enter.  Obviously this'll be changed in later versions.
 
-Also statistics aren't implemented yet, they'll just say 0.0.
+Also statistics aren't implemented yet, they all just say 0.0.
 
 
 See LICENCE for licence details.
