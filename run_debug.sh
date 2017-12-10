@@ -1,1 +1,1 @@
-python3 fruitutor.py -m inspector
+python3 main.py -m inspector

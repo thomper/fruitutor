@@ -42,7 +42,7 @@ SHIFT_KEYS = {'`': '~',
               '/': '?'}
 
 
-class Fruitutor(FloatLayout):
+class Main(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.input_display.on_load()
@@ -97,11 +97,10 @@ class Fruitutor(FloatLayout):
             pass  # this method can be called before self.session is set
 
 
-
-class FruitutorApp(App):
+class MainApp(App):
     def build(self):
-        return Fruitutor()
+        return Main()
 
 
 if __name__ == '__main__':
-    FruitutorApp().run()
+    MainApp().run()
